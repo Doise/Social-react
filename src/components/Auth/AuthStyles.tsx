@@ -64,5 +64,13 @@ export const useAuthStyles = makeStyles((theme) => {
         backgroundColor: theme.palette.success.dark,
       }
     },
+
+    backDrop: {
+      zIndex: 10,
+      position: "absolute",
+      backdropFilter: "blur(3px)",
+      backgroundColor: "rgba(0,0,0,0)",
+      transition: "backdropFilter 1s ease-in"
+    },
   };
 });

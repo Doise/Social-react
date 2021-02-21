@@ -1,5 +1,11 @@
-import { Divider, TextField, Typography } from "@material-ui/core";
-import { useEffect, useState } from "react";
+import {
+  Backdrop,
+  CircularProgress,
+  Divider,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import React, { useState } from "react";
 import { useLoginUser } from "../../../api/loginUser";
 import { SocialButton } from "../../SocialButton/SocialButton";
 import { useAuthStyles } from "../AuthStyles";
@@ -11,24 +17,14 @@ export interface Props {
 
 export const Login = ({ forgotPass, createAccount }: Props) => {
   const classes = useAuthStyles();
-  const { loginUser, loading, error } = useLoginUser();
+  const { loginUser, loading } = useLoginUser();
 
   const [identity, setIdentity] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    loginUser(identity, password).then(user => {
-      console.log(user);
-    })
+  const handleLogin = async () => {
+    await loginUser(identity, password);
   };
-
-  useEffect(() => {
-    console.log(`isLoading: ${loading}`);
-  }, [loading])
-  
-  useEffect(() => {
-    console.log(`error: ${error}`);
-  }, [error])
 
   return (
     <div className={classes.root}>
@@ -46,6 +42,7 @@ export const Login = ({ forgotPass, createAccount }: Props) => {
         <TextField
           variant="outlined"
           label="Password"
+          type="password"
           className={classes.input}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -75,6 +72,9 @@ export const Login = ({ forgotPass, createAccount }: Props) => {
         >
           Create New Account
         </SocialButton>
+        <Backdrop className={classes.backDrop} open={loading}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </div>
     </div>
   );

@@ -1,4 +1,9 @@
+import { useSnackbar } from "notistack";
 import { gql, useMutation } from "@apollo/client";
+import {
+  IUserResult,
+  useAuth,
+} from "../components/Auth/AuthProvider/AuthProvider";
 
 export const LOGIN_USER = gql`
   mutation loginUser($identity: String!, $password: String!) {
@@ -16,6 +21,8 @@ export const LOGIN_USER = gql`
 
 export const useLoginUser = () => {
   const [loginUserMutation, { loading, error }] = useMutation(LOGIN_USER);
+  const { enqueueSnackbar } = useSnackbar();
+  const { logIn } = useAuth();
 
   const loginUser = async (identity: string, password: string) => {
     try {
@@ -25,10 +32,15 @@ export const useLoginUser = () => {
           password,
         },
       });
-      
-      return result.data.loginUser;
+
+      logIn(result.data.loginUser as IUserResult);
     } catch (e) {
-      console.error(`SOCIAL ERROR: ${e}`);
+      if (`${e}`.includes("Bad username/password")) {
+        enqueueSnackbar("Error: bad username/password", {
+          autoHideDuration: 2000,
+          variant: "error",
+        });
+      }
     }
   };
 

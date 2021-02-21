@@ -15,14 +15,16 @@ export const AuthDialog = () => {
   const goBack = () => {
     setIsSlide(false);
     setDirection("left");
-    setNextComp(<Login forgotPass={forgotPass} createAccount={createAccount} />);
+    setNextComp(
+      <Login forgotPass={forgotPass} createAccount={createAccount} />
+    );
   };
 
   const createAccount = () => {
     setIsSlide(false);
     setDirection("right");
     setNextComp(<CreateAccount goBack={goBack} />);
-  }
+  };
 
   const forgotPass = () => {
     setIsSlide(false);
@@ -33,7 +35,7 @@ export const AuthDialog = () => {
   const handleExited = () => {
     setCurrentComp(nextComp);
 
-    if(nextComp?.type === createElement(Login).type) {
+    if (nextComp?.type === createElement(Login).type) {
       setDirection("right");
     } else {
       setDirection("left");
@@ -47,10 +49,19 @@ export const AuthDialog = () => {
     <Login forgotPass={forgotPass} createAccount={createAccount} />
   );
 
+  const resetComp = () => {
+    setIsAuthOpen(false);
+    setNextComp(null);
+    setCurrentComp(
+      <Login forgotPass={forgotPass} createAccount={createAccount} />
+    );
+  };
+
   return (
     <Dialog
       open={isAuthOpen}
       onClose={() => setIsAuthOpen(false)}
+      onExited={resetComp}
       className={classes.root}
       PaperProps={{
         classes: {

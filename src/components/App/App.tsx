@@ -4,6 +4,8 @@ import { Dashboard } from "../Dashboard/Dashboard";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Profile } from "../Profile/Profile";
 import { AuthProvider } from "../Auth/AuthProvider/AuthProvider";
+import { SnackbarProvider } from "notistack";
+import { CookiesProvider } from "react-cookie";
 import {
   ApolloClient,
   ApolloProvider,
@@ -27,12 +29,16 @@ function App() {
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
-          <AuthProvider>
-            <Switch>
-              <Route exact path="/" component={Dashboard} />
-              <Route exact path="/profile" component={Profile} />
-            </Switch>
-          </AuthProvider>
+          <SnackbarProvider>
+            <CookiesProvider>
+              <AuthProvider>
+                <Switch>
+                  <Route exact path="/" component={Dashboard} />
+                  <Route exact path="/profile" component={Profile} />
+                </Switch>
+              </AuthProvider>
+            </CookiesProvider>
+          </SnackbarProvider>
         </BrowserRouter>
       </ThemeProvider>
     </ApolloProvider>
